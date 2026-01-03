@@ -104,6 +104,7 @@ juce_add_plugin(
   PLUGIN_CODE
   Expl # change this (for max compatibility, first letter must be uppercase, remaining lowercase)
   FORMATS
+  AAX
   AU
   Standalone
   VST3
