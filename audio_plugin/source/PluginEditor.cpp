@@ -1,5 +1,5 @@
 namespace audio_plugin {
-PluginEditor::PluginEditor(AudioPluginAudioProcessor& p)
+PluginEditor::PluginEditor(PluginProcessor& p)
     : AudioProcessorEditor(&p), processorRef(p) {
   juce::ignoreUnused(processorRef);
   // Make sure that before the constructor has finished, you've set the
