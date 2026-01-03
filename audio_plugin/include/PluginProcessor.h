@@ -1,12 +1,9 @@
 #pragma once
 
-#include <juce_audio_processors/juce_audio_processors.h>
-
 namespace audio_plugin {
 class AudioPluginAudioProcessor : public juce::AudioProcessor {
 public:
   AudioPluginAudioProcessor();
-  ~AudioPluginAudioProcessor() override;
 
   void prepareToPlay(double sampleRate, int samplesPerBlock) override;
   void releaseResources() override;

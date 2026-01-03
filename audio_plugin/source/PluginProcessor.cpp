@@ -11,8 +11,6 @@ AudioPluginAudioProcessor::AudioPluginAudioProcessor()
       ) {
 }
 
-AudioPluginAudioProcessor::~AudioPluginAudioProcessor() {}
-
 const juce::String AudioPluginAudioProcessor::getName() const {
   return AUDIO_PLUGIN_NAME;
 }

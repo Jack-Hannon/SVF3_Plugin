@@ -1,9 +1,6 @@
 #pragma once
 
-#include "PluginProcessor.h"
-
 namespace audio_plugin {
-
 class AudioPluginAudioProcessorEditor : public juce::AudioProcessorEditor {
 public:
   explicit AudioPluginAudioProcessorEditor(AudioPluginAudioProcessor&);
