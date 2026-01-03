@@ -10,7 +10,7 @@ jobs:
   build-unix:
     strategy:
       matrix:
-        os: [macos-14, ubuntu-latest]
+        os: [ubuntu-latest] # you can use macos-14 here, but it's expensive
         preset: [default, release]
 
     runs-on: ${{ matrix.os }}
@@ -57,10 +57,9 @@ jobs:
   build-windows:
     strategy:
       matrix:
-        os: [windows-latest]
         config: [Debug, Release]
 
-    runs-on: ${{ matrix.os }}
+    runs-on: windows-latest
 
     steps:
     - uses: ilammy/msvc-dev-cmd@v1 # use MSVC on Windows not minGW
