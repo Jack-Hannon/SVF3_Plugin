@@ -56,9 +56,7 @@ cpmaddpackage(
   NAME
   JUCE
   GIT_TAG
-  8.0.6
-  VERSION
-  8.0.6
+  8.0.12
   GITHUB_REPOSITORY
   juce-framework/JUCE
   SOURCE_DIR
@@ -72,7 +70,7 @@ cpmaddpackage(
   GITHUB_REPOSITORY
   google/googletest
   VERSION
-  1.16.0
+  1.17.0
   SOURCE_DIR
   ${LIB_DIR}/googletest
   OPTIONS
@@ -82,7 +80,6 @@ cpmaddpackage(
 
 # Add compiler warning utilities
 include(cmake/CompilerWarnings.cmake)
-include(cmake/Util.cmake)
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
   # Sets the Windows VST3 installation location to one
@@ -90,8 +87,50 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
   set_directory_properties(PROPERTIES JUCE_VST3_COPY_DIR "$ENV{LOCALAPPDATA}/Programs/Common/VST3")
 endif()
 
-# Adds all the targets configured in the "plugin" folder.
-add_subdirectory(plugin)
+# Adds a plugin target (that's basically what the Projucer does).
+set(AUDIO_PLUGIN_NAME "YourPluginName") # change this
+juce_add_plugin(
+  ${PROJECT_NAME}
+  COMPANY_NAME
+  "MyCompany" # change this
+  IS_SYNTH
+  FALSE # may change this
+  NEEDS_MIDI_INPUT
+  FALSE # may change this
+  NEEDS_MIDI_OUTPUT
+  FALSE # may change this
+  PLUGIN_MANUFACTURER_CODE
+  Mcmp # change this (for max compatibility, first letter must be uppercase, remaining lowercase)
+  PLUGIN_CODE
+  Expl # change this (for max compatibility, first letter must be uppercase, remaining lowercase)
+  FORMATS
+  AAX
+  AU
+  Standalone
+  VST3
+  PRODUCT_NAME
+  ${AUDIO_PLUGIN_NAME}
+)
+
+juce_add_module(audio_plugin ALIAS_NAMESPACE my_company)
+
+target_link_libraries(
+  ${PROJECT_NAME}
+  PRIVATE my_company::audio_plugin
+  PUBLIC juce::juce_recommended_config_flags juce::juce_recommended_lto_flags juce::juce_recommended_warning_flags
+)
+
+# These definitions are recommended by JUCE.
+target_compile_definitions(
+  audio_plugin
+  INTERFACE AUDIO_PLUGIN_NAME="${AUDIO_PLUGIN_NAME}"
+            JUCE_WEB_BROWSER=0
+            JUCE_USE_CURL=0
+            JUCE_VST3_CAN_REPLACE_VST2=0
+)
+
+# Enables strict C++ warnings and treats warnings as errors.
+target_compile_options(audio_plugin INTERFACE "${PROJECT_WARNINGS_CXX}")
 
 # This command allows running tests from the "build" folder (the one where CMake generates the project to).
 enable_testing()
