@@ -1,18 +1,46 @@
 # Mandatory line, sets the minimum version of CMake that should be used with this repository.
 # 3.22 is the minimum CMake version required by JUCE.
+# 3.25 is required for the MSVC_DEBUG_INFORMATION_FORMAT feature to work.
 # To verify your version run
 # $ cmake --version
-cmake_minimum_required(VERSION 3.22 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.25 FATAL_ERROR)
 
-# Sets a few variables, like PROJECT_NAME.
-project(JucePluginDevelopmentCourseTremoloPlugin)
+# Enable setting CMAKE_MSVC_DEBUG_INFORMATION_FORMAT
+set(CMAKE_POLICY_DEFAULT_CMP0141
+    NEW
+    CACHE STRING "" FORCE
+)
+
+# Sets the minimum deployment target
+# macOS 10.11 is the minimum required by JUCE
+set(CMAKE_OSX_DEPLOYMENT_TARGET
+    "10.11"
+    CACHE STRING "" FORCE
+)
+# Builds a binary that works on Apple Silicon (arm64) and Intel-based Macs
+set(CMAKE_OSX_ARCHITECTURES
+    "x86_64;arm64"
+    CACHE STRING "" FORCE
+)
+
+# Sets a few variables, like PROJECT_NAME. VERSION is needed by JUCE.
+project(AudioPlugin VERSION 0.1.0)
 
 # Set the C++ standard only if this project is standalone;
 # otherwise, let clients decide.
 if(PROJECT_IS_TOP_LEVEL)
-  # Always use the newest C++ standard on green-field projects if possible.
-  # C++ 20 is a good baseline.
-  set(CMAKE_CXX_STANDARD 20)
+  if(NOT CMAKE_CXX_STANDARD)
+    # Always use the newest C++ standard on green-field projects if possible.
+    set(CMAKE_CXX_STANDARD 23)
+  endif()
+
+  # Links to C++ runtime statically
+  set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+  # Embeds debug information
+  set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT
+      "$<$<CONFIG:Debug,RelWithDebInfo>:Embedded>"
+      CACHE STRING "" FORCE
+  )
 endif()
 
 # I like to download the dependencies to the same folder as the project.
@@ -55,6 +83,12 @@ cpmaddpackage(
 # Add compiler warning utilities
 include(cmake/CompilerWarnings.cmake)
 include(cmake/Util.cmake)
+
+if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
+  # Sets the Windows VST3 installation location to one
+  # that doesn't require elevated permissions
+  set_directory_properties(PROPERTIES JUCE_VST3_COPY_DIR "$ENV{LOCALAPPDATA}/Programs/Common/VST3")
+endif()
 
 # Adds all the targets configured in the "plugin" folder.
 add_subdirectory(plugin)
