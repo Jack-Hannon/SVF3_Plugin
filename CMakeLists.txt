@@ -82,7 +82,6 @@ cpmaddpackage(
 
 # Add compiler warning utilities
 include(cmake/CompilerWarnings.cmake)
-include(cmake/Util.cmake)
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
   # Sets the Windows VST3 installation location to one
