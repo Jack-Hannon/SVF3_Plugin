@@ -8,8 +8,6 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(
   setSize(400, 300);
 }
 
-AudioPluginAudioProcessorEditor::~AudioPluginAudioProcessorEditor() {}
-
 void AudioPluginAudioProcessorEditor::paint(juce::Graphics& g) {
   // (Our component is opaque, so we must completely fill the background with a
   // solid colour)

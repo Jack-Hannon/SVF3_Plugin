@@ -4,7 +4,6 @@ namespace audio_plugin {
 class AudioPluginAudioProcessorEditor : public juce::AudioProcessorEditor {
 public:
   explicit AudioPluginAudioProcessorEditor(AudioPluginAudioProcessor&);
-  ~AudioPluginAudioProcessorEditor() override;
 
   void paint(juce::Graphics&) override;
   void resized() override;
