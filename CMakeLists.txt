@@ -70,7 +70,7 @@ cpmaddpackage(
   GITHUB_REPOSITORY
   google/googletest
   VERSION
-  1.16.0
+  1.17.0
   SOURCE_DIR
   ${LIB_DIR}/googletest
   OPTIONS
