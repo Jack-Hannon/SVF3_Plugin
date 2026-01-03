@@ -1,9 +1,9 @@
 #pragma once
 
 namespace audio_plugin {
-class AudioPluginAudioProcessorEditor : public juce::AudioProcessorEditor {
+class PluginEditor : public juce::AudioProcessorEditor {
 public:
-  explicit AudioPluginAudioProcessorEditor(AudioPluginAudioProcessor&);
+  explicit PluginEditor(AudioPluginAudioProcessor&);
 
   void paint(juce::Graphics&) override;
   void resized() override;
@@ -13,6 +13,6 @@ private:
   // access the processor object that created it.
   AudioPluginAudioProcessor& processorRef;
 
-  JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AudioPluginAudioProcessorEditor)
+  JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PluginEditor)
 };
 }  // namespace audio_plugin
