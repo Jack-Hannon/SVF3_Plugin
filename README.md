@@ -2,19 +2,15 @@
 
 ![Cmake workflow success badge](https://github.com/JanWilczek/audio-plugin-template/actions/workflows/cmake.yml/badge.svg)
 
-Want to create an audio plugin (e.g., a VST3 plugin) with C++ but don't know how to go about?
+[**FREE JUCE AUDIO PLUGIN DEVELOPMENT COURSE**](https://wolfsoundacademy.com/juce)
 
-Heard about the [JUCE C++ framework](https://github.com/juce-framework/JUCE) but not sure how to start a JUCE project?
-
-Want to use CMake with JUCE but don't know how?
-
-Want to be able to easily integrate third-party C++ libraries to your project?
-
-Want to unit test your audio plugin?
-
-Want to ensure maximum safety of your software?
-
-And all this with a click of a button?
+- Want to create an audio plugin (e.g., a VST3 plugin) with C++ but don't know how to go about?
+- Heard about the [JUCE C++ framework](https://github.com/juce-framework/JUCE) but not sure how to start a JUCE project?
+- Want to use CMake with JUCE but don't know how?
+- Want to be able to easily integrate third-party C++ libraries to your project?
+- Want to unit test your audio plugin?
+- Want to ensure maximum safety of your software?
+- And all this with a click of a button?
 
 Well, this template allows you to immediately start your JUCE C++ framework audio plugin project with a CMake-based project structure. It involves
 
@@ -42,21 +38,14 @@ After cloning it locally, you can proceed with the usual CMake workflow.
 In the main repo directory execute
 
 ```bash
-$ cmake -S . -B build
-$ cmake --build build
+cmake --preset default
+cmake --build --preset default
+ctest --preset default
 ```
 
 The first run will take the most time because the dependencies (CPM, JUCE, and googletest) need to be downloaded.
 
-Alternatively, you can use bundled CMake presets:
-
-```bash
-$ cmake --preset default # uses the Ninja build system
-$ cmake --build build
-$ ctest --preset default
-```
-
-Existing presets are `default`, `release`, and `Xcode`.
+Check [*CMakePresets.json*](./CMakePresets.json) for all existing presets.
 
 To run clang-format on every commit, in the main directory execute
 
@@ -73,3 +62,11 @@ Don't forget to change "YourPluginName" to, well, your plugin name everywhere ðŸ
 See how I create this template step by step in this video:
 
 [![Audio plugin template tutorial video](http://img.youtube.com/vi/Uq7Hwt18s3s/0.jpg)](https://www.youtube.com/watch?v=Uq7Hwt18s3s "Audio plugin template tutorial video")
+
+## License
+
+This template repo uses the [Unlicense license](./LICENSE.md) so that you don't have to care about giving me credit.
+
+If you found the repo helpful, consider [buying me a coffee](https://buymeacoffee.com/janwilczek).
+
+Remember that CPM, JUCE, and GoogleTest are separately licensed.
