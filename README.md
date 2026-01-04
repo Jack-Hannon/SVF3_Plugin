@@ -4,13 +4,13 @@
 
 [**FREE JUCE AUDIO PLUGIN DEVELOPMENT COURSE**](https://wolfsoundacademy.com/juce)
 
-- Want to create an audio plugin (e.g., a VST3 plugin) with C++ but don't know how to go about?
-- Heard about the [JUCE C++ framework](https://github.com/juce-framework/JUCE) but not sure how to start a JUCE project?
-- Want to use CMake with JUCE but don't know how?
-- Want to be able to easily integrate third-party C++ libraries to your project?
-- Want to unit test your audio plugin?
-- Want to ensure maximum safety of your software?
-- And all this with a click of a button?
+* Want to create an audio plugin (e.g., a VST3 plugin) with C++ but don't know how to go about?
+* Heard about the [JUCE C++ framework](https://github.com/juce-framework/JUCE) but not sure how to start a JUCE project?
+* Want to use CMake with JUCE but don't know how?
+* Want to be able to easily integrate third-party C++ libraries to your project?
+* Want to unit test your audio plugin?
+* Want to ensure maximum safety of your software?
+* And all this with a click of a button?
 
 Well, this template allows you to immediately start your JUCE C++ framework audio plugin project with a CMake-based project structure. It involves
 
@@ -19,6 +19,7 @@ Well, this template allows you to immediately start your JUCE C++ framework audi
 * effortless handling of third-party dependencies with the CPM package manager; use the C++ libraries you want together with JUCE
 * highest warning level and "treat warnings as errors"
 * ready-to-go unit test project with GoogleTest
+* integrates with Visual Studio, Visual Studio Code, Xcode, CLion, and NeoVim
 
 Additionally
 
@@ -67,6 +68,6 @@ See how I create this template step by step in this video:
 
 This template repo uses the [Unlicense license](./LICENSE.md) so that you don't have to care about giving me credit.
 
-If you found the repo helpful, consider [buying me a coffee](https://buymeacoffee.com/janwilczek).
+If you found the repo helpful, please consider [buying me a coffee](https://buymeacoffee.com/janwilczek).
 
 Remember that CPM, JUCE, and GoogleTest are separately licensed.
