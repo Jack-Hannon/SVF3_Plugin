@@ -2,8 +2,8 @@ namespace audio_plugin {
 PluginProcessor::PluginProcessor()
     : AudioProcessor(
           BusesProperties()
-#if !JucePlugin_IsMidiEffect
-#if !JucePlugin_IsSynth
+#if !JUCE_IS_MIDI_EFFECT
+#if !JUCE_IS_SYNTH
               .withInput("Input", juce::AudioChannelSet::stereo(), true)
 #endif
               .withOutput("Output", juce::AudioChannelSet::stereo(), true)
@@ -12,11 +12,11 @@ PluginProcessor::PluginProcessor()
 }
 
 const juce::String PluginProcessor::getName() const {
-  return AUDIO_PLUGIN_NAME;
+  return JUCE_PLUGIN_NAME;
 }
 
 bool PluginProcessor::acceptsMidi() const {
-#if JucePlugin_WantsMidiInput
+#if JUCE_NEEDS_MIDI_INPUT
   return true;
 #else
   return false;
@@ -24,7 +24,7 @@ bool PluginProcessor::acceptsMidi() const {
 }
 
 bool PluginProcessor::producesMidi() const {
-#if JucePlugin_ProducesMidiOutput
+#if JUCE_NEEDS_MIDI_OUTPUT
   return true;
 #else
   return false;
@@ -32,7 +32,7 @@ bool PluginProcessor::producesMidi() const {
 }
 
 bool PluginProcessor::isMidiEffect() const {
-#if JucePlugin_IsMidiEffect
+#if JUCE_IS_MIDI_EFFECT
   return true;
 #else
   return false;
@@ -79,7 +79,7 @@ void PluginProcessor::releaseResources() {
 }
 
 bool PluginProcessor::isBusesLayoutSupported(const BusesLayout& layouts) const {
-#if JucePlugin_IsMidiEffect
+#if JUCE_IS_MIDI_EFFECT
   juce::ignoreUnused(layouts);
   return true;
 #else
@@ -92,7 +92,7 @@ bool PluginProcessor::isBusesLayoutSupported(const BusesLayout& layouts) const {
     return false;
 
   // This checks if the input layout matches the output layout
-#if !JucePlugin_IsSynth
+#if !JUCE_IS_SYNTH
   if (layouts.getMainOutputChannelSet() != layouts.getMainInputChannelSet())
     return false;
 #endif
