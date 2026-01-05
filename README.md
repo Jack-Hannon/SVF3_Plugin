@@ -2,7 +2,7 @@
 
 ![Cmake workflow success badge](https://github.com/JanWilczek/audio-plugin-template/actions/workflows/cmake.yml/badge.svg)
 
-[**FREE JUCE AUDIO PLUGIN DEVELOPMENT COURSE**](https://wolfsoundacademy.com/juce)
+[**FREE JUCE AUDIO PLUGIN DEVELOPMENT COURSE**](https://wolfsoundacademy.com/juce?utm_source=github-audio-plugin-template)
 
 * Want to create an audio plugin (e.g., a VST3 plugin) with C++ but don't know how to go about?
 * Heard about the [JUCE C++ framework](https://github.com/juce-framework/JUCE) but not sure how to start a JUCE project?
