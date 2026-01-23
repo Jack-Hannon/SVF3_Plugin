@@ -41,7 +41,11 @@ Feel free to propose suggestions 😉
     git clone https://github.com/<YourUsername>/<YourRepoName>.git
     ```
     in the terminal. Some people swear by the command line, some by GitHub Desktop, some by Tortoise Git; pick the tool you like.
-1. After cloning your repo locally, change the metadata passed to `juce_add_plugin()` function in the *CMakeLists.txt* file.
+1. After cloning your repo locally, change the metadata passed to `juce_add_plugin()` function in the *CMakeLists.txt* file. In particular, change
+    1. `COMPANY_NAME`
+    1. `PLUGIN_MANUFACTURER_CODE`
+    1. `PLUGIN_CODE`
+    1. `PRODUCT_NAME`
 1. After cloning your repo locally, you can proceed with the usual CMake workflow. That involves two steps:
     1. Configure (buildsystem generation)
     1. Build (buildystem invocation)
