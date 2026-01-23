@@ -24,7 +24,7 @@ set(CMAKE_OSX_ARCHITECTURES
 )
 
 # Sets a few variables, like PROJECT_NAME. VERSION is needed by JUCE.
-project(AudioPlugin VERSION 0.1.0)
+project(AudioPlugin)
 
 # Set the C++ standard only if this project is standalone;
 # otherwise, let clients decide.
@@ -109,7 +109,15 @@ juce_add_plugin(
   VST3
   PRODUCT_NAME
   "YourPluginName" # change this
+  VERSION
+  0.0.0 # 0.0.0 forces AU host to always rescan the plugin. Change this before releasing
+  COPY_PLUGIN_AFTER_BUILD
+  FALSE # Changing this to TRUE will enable automatic copying of the built plugin formats
+        # to correct directories on your system. The directories must exist, though
 )
+
+# These definitions are recommended by JUCE
+target_compile_definitions(AudioPlugin PRIVATE JUCE_WEB_BROWSER=0 JUCE_USE_CURL=0 JUCE_VST3_CAN_REPLACE_VST2=0)
 
 # We want to have a "library" target with PluginProcessor and PluginEditor to use in plugins and in tests.
 # Library targets that use JUCE modules non-PRIVATEly should be created as JUCE module themselves,
@@ -117,13 +125,6 @@ juce_add_plugin(
 # This is unlikely on small projects, but we want to use the best practices from the start
 # (and migrating to JUCE modules at a late development stage is a nightmare, trust me).
 juce_add_module(audio_plugin ALIAS_NAMESPACE my_company)
-
-# We need to link the plugin targets with the module containing our code.
-target_link_libraries(
-  AudioPlugin
-  PRIVATE my_company::audio_plugin
-  PUBLIC juce::juce_recommended_config_flags juce::juce_recommended_lto_flags juce::juce_recommended_warning_flags
-)
 
 # In the following, we re-export some of the compile-time definitions derived from arguments of
 # juce_add_plugin(). This is necessary to maintain consistent behavior in built plugins and in tests.
@@ -141,14 +142,17 @@ target_compile_definitions(
             JUCE_IS_SYNTH=$<BOOL:$<TARGET_PROPERTY:AudioPlugin,JUCE_IS_SYNTH>>
             JUCE_NEEDS_MIDI_INPUT=$<BOOL:$<TARGET_PROPERTY:AudioPlugin,JUCE_NEEDS_MIDI_INPUT>>
             JUCE_NEEDS_MIDI_OUTPUT=$<BOOL:$<TARGET_PROPERTY:AudioPlugin,JUCE_NEEDS_MIDI_OUTPUT>>
-            # These definitions are recommended by JUCE:
-            JUCE_WEB_BROWSER=0
-            JUCE_USE_CURL=0
-            JUCE_VST3_CAN_REPLACE_VST2=0
 )
 
 # Enables strict C++ warnings and treats warnings as errors.
 target_compile_options(audio_plugin INTERFACE "${PROJECT_WARNINGS_CXX}")
+
+# We need to link the plugin targets with the module containing our code.
+target_link_libraries(
+  AudioPlugin
+  PRIVATE my_company::audio_plugin
+  PUBLIC juce::juce_recommended_config_flags juce::juce_recommended_lto_flags juce::juce_recommended_warning_flags
+)
 
 # This command allows running tests from the "build" folder (the one where CMake generates the project to).
 enable_testing()
