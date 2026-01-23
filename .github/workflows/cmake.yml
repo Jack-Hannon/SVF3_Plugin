@@ -74,11 +74,11 @@ jobs:
         key: ${{ runner.os }}-libs-${{ hashFiles('CMakeLists.txt') }}
 
     - name: Configure CMake
-      run: cmake --preset vs
+      run: cmake --preset vs2022
 
     - name: Build
-      run: cmake --build --preset vs --config ${{ matrix.config }}
+      run: cmake --build --preset vs2022 --config ${{ matrix.config }}
 
     - name: Test
-      run: ctest --preset vs -C ${{ matrix.config }}
+      run: ctest --preset vs2022 -C ${{ matrix.config }}
 
