@@ -2,7 +2,7 @@
 
 ![Cmake workflow success badge](https://github.com/JanWilczek/audio-plugin-template/actions/workflows/cmake.yml/badge.svg)
 
-[**✨FREE JUCE AUDIO PLUGIN DEVELOPMENT COURSE✨**](https://wolfsoundacademy.com/juce?utm_source=github-audio-plugin-template)
+[**✨FREE JUCE AUDIO PLUGIN DEVELOPMENT COURSE✨**](https://wolfsoundacademy.com/juce?utm_source=github-audio-plugin-template&utm_medium=referral)
 
 > [!IMPORTANT]
 > This is version 2 of the audio-plugin-template, which contains important improvements and updates over version 1. Don't be surprised if the setup doesn't match 1:1 what I have shown in the 2023 YouTube video 😉 Using v2 is even simpler than v1.
