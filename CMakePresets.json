@@ -2,13 +2,12 @@
   "version": 5,
   "cmakeMinimumRequired": {
     "major": 3,
-    "minor": 22,
+    "minor": 25,
     "patch": 0
   },
   "configurePresets": [
     {
       "name": "default",
-      "generator": "Ninja",
       "binaryDir": "build",
       "cacheVariables": {
         "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
@@ -24,12 +23,17 @@
       }
     },
     {
-      "name": "vs",
+      "name": "vs2022",
       "generator": "Visual Studio 17 2022",
+      "binaryDir": "vs2022-build"
+    },
+    {
+      "name": "vs",
+      "generator": "Visual Studio 18 2026",
       "binaryDir": "vs-build"
     },
     {
-      "name": "Xcode",
+      "name": "xcode",
       "generator": "Xcode",
       "binaryDir": "xcode-build"
     }
@@ -44,12 +48,16 @@
       "configurePreset": "release"
     },
     {
+      "name": "vs2022",
+      "configurePreset": "vs2022"
+    },
+    {
       "name": "vs",
       "configurePreset": "vs"
     },
     {
-      "name": "Xcode",
-      "configurePreset": "Xcode"
+      "name": "xcode",
+      "configurePreset": "xcode"
     }
   ],
   "testPresets": [
@@ -68,14 +76,21 @@
       "configurePreset": "release"
     },
     {
-      "name": "vs",
+      "name": "vs2022",
       "inherits": "default",
-      "configurePreset": "vs"
+      "configurePreset": "vs2022",
+      "configuration": "Debug"
     },
     {
-      "name": "Xcode",
+      "name": "vs",
       "inherits": "default",
-      "configurePreset": "Xcode",
+      "configurePreset": "vs",
+      "configuration": "Debug"
+    },
+    {
+      "name": "xcode",
+      "inherits": "default",
+      "configurePreset": "xcode",
       "configuration": "Debug"
     }
   ]
