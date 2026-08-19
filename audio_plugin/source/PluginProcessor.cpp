@@ -1,3 +1,9 @@
+// This plugin was developed using Jan Wilczek's (WolfSound)
+// Audio Plugin Template:
+// https://github.com/JanWilczek/audio-plugin-template
+
+#include "audio_plugin.h"
+
 namespace audio_plugin {
 PluginProcessor::PluginProcessor()
     : AudioProcessor(
@@ -62,20 +68,22 @@ const juce::String PluginProcessor::getProgramName(int index) {
   return {};
 }
 
-void PluginProcessor::changeProgramName(int index,
-                                        const juce::String& newName) {
+
+void PluginProcessor::changeProgramName(int index, const juce::String& newName) {
   juce::ignoreUnused(index, newName);
 }
 
-void PluginProcessor::prepareToPlay(double sampleRate, int samplesPerBlock) {
-  // Use this method as the place to do any pre-playback
-  // initialisation that you need..
-  juce::ignoreUnused(sampleRate, samplesPerBlock);
+
+void PluginProcessor::prepareToPlay(double sampleRate, int expectedMaxFramesPerBlock) {
+  currentSampleRate = sampleRate;
+  svf3.prepare(sampleRate, expectedMaxFramesPerBlock, juce::jmax(getTotalNumInputChannels(), getTotalNumOutputChannels()));
 }
 
 void PluginProcessor::releaseResources() {
   // When playback stops, you can use this as an opportunity to free up any
   // spare memory, etc.
+  svf3.reset();
+
 }
 
 bool PluginProcessor::isBusesLayoutSupported(const BusesLayout& layouts) const {
@@ -115,42 +123,70 @@ void PluginProcessor::processBlock(juce::AudioBuffer<float>& buffer,
   // This is here to avoid people getting screaming feedback
   // when they first compile a plugin, but obviously you don't need to keep
   // this code if your algorithm always overwrites all the output channels.
-  for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
+  for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i) {
     buffer.clear(i, 0, buffer.getNumSamples());
-
-  // This is the place where you'd normally do the guts of your plugin's
-  // audio processing...
-  // Make sure to reset the state if your inner loop is processing
-  // the samples and the outer loop is handling the channels.
-  // Alternatively, you can process the samples with the channels
-  // interleaved by keeping the same state.
-  for (int channel = 0; channel < totalNumInputChannels; ++channel) {
-    auto* channelData = buffer.getWritePointer(channel);
-    juce::ignoreUnused(channelData);
-    // ..do something to the data...
   }
+  svf3.setFc(parameters.fc);
+  svf3.setG(parameters.g);
+  svf3.setQa(parameters.Qa);
+  svf3.setQb(parameters.Qb);
+  svf3.setVol(parameters.vol);
+  
+  const auto filterType = static_cast<Svf3::FilterType>(parameters.filt_type.getIndex());
+  svf3.setFilterType(filterType);
+  svf3.process(buffer);  
 }
 
 bool PluginProcessor::hasEditor() const {
   return true;  // (change this to false if you choose to not supply an editor)
 }
 
+Parameters& PluginProcessor::getParameterRefs() noexcept {
+  return parameters;
+}
+
 juce::AudioProcessorEditor* PluginProcessor::createEditor() {
   return new PluginEditor(*this);
 }
 
-void PluginProcessor::getStateInformation(juce::MemoryBlock& destData) {
-  // You should use this method to store your parameters in the memory block.
-  // You could do that either as raw data, or use the XML or ValueTree classes
-  // as intermediaries to make it easy to save and load complex data.
-  juce::ignoreUnused(destData);
+void PluginProcessor::getStateInformation(juce::MemoryBlock& destData)
+{
+    DBG("========== GET STATE CALLED ==========");
+
+    juce::MemoryOutputStream outputStream{destData, false};
+    JsonSerializer::serialize(parameters, outputStream);
+
+    DBG("STATE SIZE: " + juce::String((int) destData.getSize()));
+
+    DBG("STATE DATA:");
+    DBG(juce::String::fromUTF8(
+        static_cast<const char*>(destData.getData()),
+        static_cast<int>(destData.getSize())));
 }
 
-void PluginProcessor::setStateInformation(const void* data, int sizeInBytes) {
-  // You should use this method to restore your parameters from this memory
-  // block, whose contents will have been created by the getStateInformation()
-  // call.
-  juce::ignoreUnused(data, sizeInBytes);
+void PluginProcessor::setStateInformation(const void* data, int sizeInBytes)
+{
+    DBG("========== SET STATE CALLED ==========");
+    DBG("STATE SIZE: " + juce::String(sizeInBytes));
+
+    DBG("STATE DATA:");
+    DBG(juce::String::fromUTF8(
+        static_cast<const char*>(data),
+        sizeInBytes));
+
+    juce::MemoryInputStream inputStream{
+        data,
+        static_cast<size_t>(sizeInBytes),
+        false
+    };
+
+    const auto result =
+        JsonSerializer::deserialize(inputStream, parameters);
+
+    if (result.failed())
+        DBG("STATE LOAD FAILED: " + result.getErrorMessage());
+    else
+        DBG("STATE LOAD SUCCESS");
 }
 }  // namespace audio_plugin
 

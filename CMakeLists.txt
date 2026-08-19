@@ -54,13 +54,13 @@ include(cmake/cpm.cmake)
 # This commands downloads AND configures JUCE. It sets up some variables, like JUCE_SOURCE_DIR.
 cpmaddpackage(
   NAME
-  JUCE
+    JUCE
   GIT_TAG
-  8.0.12
+    8.0.12
   GITHUB_REPOSITORY
-  juce-framework/JUCE
+    juce-framework/JUCE
   SOURCE_DIR
-  ${LIB_DIR}/juce
+    ${LIB_DIR}/juce
 )
 
 # Adds googletest.
@@ -84,36 +84,37 @@ include(cmake/CompilerWarnings.cmake)
 if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
   # Sets the Windows VST3 installation location to one
   # that doesn't require elevated permissions
-  set_directory_properties(PROPERTIES JUCE_VST3_COPY_DIR "$ENV{LOCALAPPDATA}/Programs/Common/VST3")
+  set_directory_properties(PROPERTIES JUCE_VST3_COPY_DIR "C:/Users/jackh/VST3")     #"C:\Users\jackh\VST3"
 endif()
 
+
+set(JUCE_PLUGIN_NAME "SVF3")
 # Adds a plugin target (that's basically what the Projucer does).
 juce_add_plugin(
   AudioPlugin
   COMPANY_NAME
-  "MyCompany" # change this
+    "JackHannon"
   IS_SYNTH
-  FALSE # may change this
+    FALSE 
   NEEDS_MIDI_INPUT
-  FALSE # may change this
+    FALSE 
   NEEDS_MIDI_OUTPUT
-  FALSE # may change this
+    FALSE 
   PLUGIN_MANUFACTURER_CODE
-  Mcmp # change this (for max compatibility, first letter must be uppercase, remaining lowercase)
+    Jawh
   PLUGIN_CODE
-  Expl # change this (for max compatibility, first letter must be uppercase, remaining lowercase)
+    Svfc
   FORMATS
-  AAX
-  AU
-  Standalone
-  VST3
+    AAX
+    AU
+    Standalone
+    VST3
   PRODUCT_NAME
-  "YourPluginName" # change this
+    ${JUCE_PLUGIN_NAME}
   VERSION
-  0.0.0 # 0.0.0 forces AU host to always rescan the plugin. Change this before releasing
+    0.0.0 
   COPY_PLUGIN_AFTER_BUILD
-  FALSE # Changing this to TRUE will enable automatic copying of the built plugin formats
-        # to correct directories on your system. The directories must exist, though
+    TRUE
 )
 
 # These definitions are recommended by JUCE
