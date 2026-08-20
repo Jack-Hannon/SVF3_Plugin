@@ -1,86 +1,25 @@
-# 🐺 WolfSound's Audio Plugin Template
+# Nonlinear 3rd Order State Variable Filter
 
-![Cmake workflow success badge](https://github.com/JanWilczek/audio-plugin-template/actions/workflows/cmake.yml/badge.svg)
+**Jack Hannon, 2026**
 
-[**✨FREE JUCE AUDIO PLUGIN DEVELOPMENT COURSE✨**](https://wolfsoundacademy.com/juce?utm_source=github-audio-plugin-template&utm_medium=referral)
+This repository contains JUCE C++ code for a nonlinear multimode audio filter. The project was inspired by Peter Blasser's analog "Sprott" Filter, a third-order jerk filter related to the chaotic systems studied by J. C. Sprott.
 
-> [!IMPORTANT]
-> This is version 2 of the audio-plugin-template, which contains important improvements and updates over version 1. Don't be surprised if the setup doesn't match 1:1 what I have shown in the 2023 YouTube video 😉 Using v2 is even simpler than v1.
+This project explores the transition from linear to chaotic behavior in a third-order state variable filter. The resulting multimode audio filter provides four distinct filter outputs (lowpass, highpass, and two asymmetric bandpass outputs), two resonance parameters, cutoff frequency control, and a nonlinearity gain control.
 
-* Want to create an audio plugin (e.g., a VST3 plugin) with C++ but don't know how to go about?
-* Heard about the [JUCE C++ framework](https://github.com/juce-framework/JUCE) but not sure how to start a JUCE project?
-* Want to use CMake with JUCE but don't know how?
-* Want to be able to easily integrate third-party C++ libraries into your project?
-* Want to unit test your audio plugin?
-* Want to ensure the maximum safety of your software?
-* And all this with a click of a button?
+<img width="495" height="393" alt="image" src="https://github.com/user-attachments/assets/d52261a1-13ba-49db-b752-13e48aa93739" />
 
-Well, this template lets you start your JUCE C++ audio plugin project right away with a CMake-based project structure. It involves
+The system behaves as a traditional resonant filter with the nonlinearity gain set to zero. In this state, the (Q_a) and (Q_b) resonance parameters control the feedback gain of the bandpass outputs. Since the bandpass outputs have asymmetric frequency responses, detuning the (Q_a) and (Q_b) resonance parameters can be used to emphasize lower or higher frequencies. The (Q_a) parameter controls the feedback gain of BPFa (BPF2), which has a roll-off of ~12 dB/octave below the cutoff frequency and ~6 dB/octave above the cutoff frequency. The (Q_b) parameter controls the feedback gain of BPFb (BPF1), which has a mirrored frequency response compared to BPFa.
 
-* a clear repo structure
-* C++ 23 standard
-* effortless handling of third-party dependencies with the CPM package manager; use the C++ libraries you want together with JUCE
-* highest warning level and "treat warnings as errors"
-* ready-to-go unit test project with GoogleTest
-* integrates with Visual Studio, Visual Studio Code, Xcode, CLion, and NeoVim
+When the nonlinearity gain surpasses 1, the system undergoes a bifurcation (supercritical pitchfork) that changes the stability of the system. When (Q_a) and (Q_b) are sufficiently high, the system undergoes a second bifurcation (subcritical Hopf), and the filter transforms into a forced, nonlinear oscillator. This bifurcation sequence is similar to the route to chaos observed in the Lorenz system, though the underlying dynamics are dissimilar. A butterfly/double-scroll attractor may be visualized by plotting the LPF and BPFb outputs against each other.
 
-Additionally
+An output gain control with dynamic limiting is included to control the output volume and prevent excessive clipping. The volume limiter can be used to set the target output level.
 
-* continuous integration made easy with GitHub Actions: build and run tests on the main branch and on every pull request
-* automatic clang-format of C++ files run on every commit; don't worry about code formatting anymore!
+## Notes / Warnings
 
-I am personally using this template all the time.
+* **This filter is highly resonant.** Test the waters without headphones when using the filter with maximum resonance. I have observed spikes of approximately 12 dB when scanning the cutoff frequency over harmonics of the input signal.
 
-Feel free to propose suggestions 😉
+* **Chaos is not always fun to listen to.** To explore the nonlinear behavior, I recommend patching a simple sawtooth oscillator to the input, setting the resonance parameters close to their maximum values (without headphones at first), tuning the cutoff frequency close to one of the first few harmonics, and then slowly increasing the nonlinearity gain. You should be able to hear the system progressing through the first and second bifurcations. I have found the most interesting behavior near the bifurcation boundaries.
 
-## 🔨 Usage
+Feel free to email me at [jackhannon777@gmail.com](mailto:jackhannon777@gmail.com).
 
-1. This is a template repository, which means you can click "Use this template" on GitHub and create your own repo out of it.
-1. Then, you need to clone the created repo locally. This is typically achieved by running
-    ```bash
-    git clone https://github.com/<YourUsername>/<YourRepoName>.git
-    ```
-    in the terminal. Some people swear by the command line, some by GitHub Desktop, some by Tortoise Git; pick the tool you like.
-1. After cloning your repo locally, change the metadata passed to `juce_add_plugin()` function in the *CMakeLists.txt* file. In particular, change
-    1. `COMPANY_NAME`
-    1. `PLUGIN_MANUFACTURER_CODE`
-    1. `PLUGIN_CODE`
-    1. `PRODUCT_NAME`
-1. After cloning your repo locally, you can proceed with the usual CMake workflow. That involves two steps:
-    1. Configure (buildsystem generation)
-    1. Build (buildystem invocation)
-
-    In the main repo directory, execute
-
-    ```bash
-    cmake --preset default # configure
-    cmake --build --preset default # build
-    ctest --preset default # test
-    ```
-
-    The first run will take the most time because the dependencies (CPM, JUCE, and googletest) need to be downloaded.
-
-    Check [*CMakePresets.json*](./CMakePresets.json) for presets other than "default", feel free to add your own, of course!
-
-4. (Optional) To run clang-format on every commit, in the main directory, execute
-
-    ```bash
-    pre-commit install
-    ```
-
-    (for this, you need to have `pre-commit` installed, e.g., with `pip`: `pip install pre-commit`).
-
-## 🧱 How was this template built?
-
-See how I created v1 of this template step by step in this video:
-
-[![Audio plugin template tutorial video](http://img.youtube.com/vi/Uq7Hwt18s3s/0.jpg)](https://www.youtube.com/watch?v=Uq7Hwt18s3s "Audio plugin template tutorial video")
-
-## 📃 License
-
-This template repo uses the [Unlicense license](./LICENSE.md) so that you don't have to worry about giving me credit.
-
-If you found the repo helpful, please consider [buying me a coffee](https://buymeacoffee.com/janwilczek).
-
-Remember that CPM, JUCE, and GoogleTest are separately licensed.
-
+**Acknowledgment:** This project was developed using Jan Wilczek's [WolfSound Audio Plugin Template](https://github.com/JanWilczek/audio-plugin-template).
